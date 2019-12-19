@@ -4,6 +4,10 @@
 # IDE Related
 /.idea/
 .DS_Store
+<<<<<<< HEAD
+/target/
+=======
+>>>>>>> 7e1f49110f1868fd2418224318b5eaa76ad08267
 
 # Log file
 *.log
