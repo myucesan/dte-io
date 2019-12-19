@@ -3,6 +3,7 @@
 
 # IDE Related
 /.idea/
+/out/
 .DS_Store
 <<<<<<< HEAD
 /target/
