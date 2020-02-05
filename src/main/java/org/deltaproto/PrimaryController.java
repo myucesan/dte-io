@@ -3,31 +3,61 @@ package org.deltaproto;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
+import java.security.Principal;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import org.java_websocket.client.WebSocketClient;
 
-public class PrimaryController extends Thread{
 
+public class PrimaryController {
+
+    WsClient client = new WsClient(new URI("http://localhost:8887/"));
     @FXML
     private Label pedalLabel;
+
+    @FXML Label connectedStatus;
+    @FXML Button connectButton;
+    @FXML
+    TextField messageTB;
+    @FXML
+    Button sendMessage;
     @FXML
     private VBox vb;
-    @FXML
-    private void switchToSecondary() throws IOException {
-        App.setRoot("secondary");
-    }
-// https://stackoverflow.com/questions/54088768/how-to-set-text-to-a-label-on-keyboard-key-press-in-javafx-application
-    //https://stackoverflow.com/questions/32806068/how-to-change-fxml-lable-text-by-id
-    //https://www.tutorialspoint.com/javafx/javafx_event_handling.htm
 
-    // KeyCode = BACK_SLASH
+    public PrimaryController() throws URISyntaxException {
+    }
+
+
+//    @FXML
+//    private void switchToSecondary() throws IOException {
+//        App.setRoot("secondary");
+//    }
+
+    @FXML
+    private void connectWS() {
+        System.out.println(12345);
+//        try {
+//            PrimaryController wsClient = new PrimaryController(new URI("ws://demos.kaazing.com/echo"));
+//        } catch (URISyntaxException e) {
+//            System.out.println("The URI is incorrect.");
+//        }
+
+    }
+//     KeyCode = BACK_SLASH
     @FXML
     private void initialize() throws IOException, InterruptedException {
         pedalLabel.setText("Starting server...");
@@ -50,11 +80,28 @@ public class PrimaryController extends Thread{
             }
         });
 
-        FeederServer s = new FeederServer(9000);
-        Thread t = new Thread(s);
     }
 
+    @FXML
+    private void connectToServer() throws URISyntaxException, IOException  {
+        client.connect();
 
+        client.send("Hello world!");
+        if(client.isClosed() == false) {
+            connectedStatus.setText("Not connected with WebSocket server.");
+            System.out.println();
 
+        } else {
+            connectedStatus.setText("Connected with WebSocket server.");
+            connectButton.setVisible(false);
+
+        }
+
+    }
+
+    @FXML
+    private void sendMessage() {
+        client.send(messageTB.getText());
+    }
 
 }
