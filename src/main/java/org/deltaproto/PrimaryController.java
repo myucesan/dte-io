@@ -25,7 +25,7 @@ import org.java_websocket.client.WebSocketClient;
 
 public class PrimaryController {
 
-    WsClient client = new WsClient(new URI("http://localhost:8887/"));
+    WsClient client = new WsClient(new URI("http://192.168.8.9:9000/"));
     @FXML
     private Label pedalLabel;
 
@@ -68,6 +68,7 @@ public class PrimaryController {
             public void handle(KeyEvent keyEvent) {
                 if(keyEvent.getCode().equals(KeyCode.BACK_SLASH)) {
                     pedalLabel.setText("Wire feeder running");
+                    client.send("KBQP");
                 }
 
             }
@@ -77,6 +78,7 @@ public class PrimaryController {
             @Override
             public void handle(KeyEvent keyEvent) {
                 pedalLabel.setText("Wire feeder dormant");
+                client.send("KBQR");
             }
         });
 
